@@ -16,7 +16,6 @@ for param in model.parameters():
 
 model.fc = nn.Linear(512, 10).to(device)
 
-print(model.fc)
 
 train_dataset = datasets.CIFAR10(
     root="data",
@@ -43,8 +42,6 @@ test_loader = DataLoader(
     batch_size=64,
     shuffle=False
 )
-
-print(weights.transforms())
 
 
 loss_fn = nn.CrossEntropyLoss()

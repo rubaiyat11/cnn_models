@@ -14,8 +14,11 @@ model = resnet18(weights=weights).to(device)
 for param in model.parameters():
     param.requires_grad = False
 
-model.fc = nn.Linear(512, 10).to(device)
+for param in model.layer4.parameters():
+    param.requires_grad = True
 
+model.fc = nn.Linear(512, 10).to(device)
+model.fc.requires_grad_(True)
 
 train_dataset = datasets.CIFAR10(
     root="data",
@@ -47,8 +50,9 @@ test_loader = DataLoader(
 loss_fn = nn.CrossEntropyLoss()
 
 optimizer = torch.optim.Adam(
-    model.fc.parameters(),
-    lr=0.001
+    list(model.layer4.parameters()) +
+    list(model.fc.parameters()),
+    lr=0.0001
 )
 
 

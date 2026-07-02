@@ -55,6 +55,11 @@ optimizer = torch.optim.Adam(
     lr=0.0001
 )
 
+scheduler = torch.optim.lr_scheduler.StepLR(
+    optimizer,
+    step_size=5,
+    gamma=0.1
+)
 
 epochs = 10
 
@@ -93,6 +98,10 @@ for epoch in range(epochs):
     print(
         f"Loss: {running_loss/len(train_loader):.4f}"
     )
+
+    scheduler.step()
+
+    print(f"Learning Rate: {scheduler.get_last_lr()[0]:.6f}")
 
 
 model.eval()

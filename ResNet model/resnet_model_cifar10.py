@@ -7,17 +7,17 @@ from torchvision.models import resnet18, ResNet18_Weights
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-weights = ResNet18_Weights.DEFAULT
+weights = ResNet18_Weights.DEFAULT      #Taking resnet default weights
 
-model = resnet18(weights=weights).to(device)
+model = resnet18(weights=weights).to(device)  #Creating Instance of resnet model with default weights
 
-for param in model.parameters():
-    param.requires_grad = False
+for param in model.parameters():        #Freeze all parameters
+    param.requires_grad = False     
 
-for param in model.layer4.parameters():
+for param in model.layer4.parameters():     #Unfreeze last layer parameters
     param.requires_grad = True
 
-model.fc = nn.Linear(512, 10).to(device)
+model.fc = nn.Linear(512, 10).to(device)    #Create a new NN layer for training CIFAR dataset
 model.fc.requires_grad_(True)
 
 train_dataset = datasets.CIFAR10(
@@ -63,14 +63,16 @@ scheduler = torch.optim.lr_scheduler.StepLR(
 
 epochs = 15
 
-for epoch in range(epochs):
+#Training LOOP
+for epoch in range(epochs):     
 
-    model.train()
+    model.train()      #Model training state
 
-    running_loss = 0
+    running_loss = 0       #Variable for calculating total loss after the loop
 
-    for images, labels in train_loader:
+    for images, labels in train_loader: #Looping through data in the dataset
 
+        #Put images, labels into GPU
         images = images.to(device)
         labels = labels.to(device)
 
@@ -106,7 +108,7 @@ for epoch in range(epochs):
 
 model.eval()
 
-classes = [
+classes = [         #Output classes
     "airplane",
     "automobile",
     "bird",
@@ -125,9 +127,9 @@ total = 0
 sample_predictions = None
 sample_labels = None
 
-with torch.no_grad():
+with torch.no_grad():   #Testing Phase
 
-    for images, labels in test_loader:
+    for images, labels in test_loader:  #Testing LOOP
 
         images = images.to(device)
         labels = labels.to(device)

@@ -61,7 +61,7 @@ scheduler = torch.optim.lr_scheduler.StepLR(
     gamma=0.1
 )
 
-epochs = 15
+epochs = 12
 
 #Training LOOP
 for epoch in range(epochs):     
